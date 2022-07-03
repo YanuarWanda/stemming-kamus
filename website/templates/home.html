@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %} Stemming dengan Kamus - NLP {% endblock %}
+
+{% block content %}
+<main>
+    <form id="form" method="post" class="original-container" enctype="multipart/form-data">
+        <h1>Dokumen</h1>
+        <textarea name="document">{{doc}}</textarea>
+        <button type="submit">Kirim</button>
+    </form>
+
+    <div class="result-container">
+        <h1>Dokumen</h1>
+        <p>{{doc}}</p>
+        <h1>#1 - Cleaning</h1>
+        <p>{{doc1}}</p>
+        <h1>#2 - Case Folding</h1>
+        <p>{{doc2}}</p>
+        <h1>#3 - Tokenization</h1>
+        <p>{{doc3}}</p>
+        <h1>#4 - Filtering</h1>
+        <p>{{doc4}}</p>
+        <h1>#5 - Stemming</h1>
+        <table>
+            <tr>
+                <th>Kata Dasar</th>
+                <th>Tipe</th>
+            </tr>
+            {% for word in doc5 %}
+                <tr>
+                    <td>{{word[1]}}</td>
+                    <td>{{word[2]}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</main>
+{% endblock %}
+
+{% block script %}
+<script>
+</script>
+{% endblock %}
