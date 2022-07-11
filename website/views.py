@@ -1,5 +1,6 @@
 import os
 import app
+import json
 from flaskext.mysql import MySQL
 from flask import Blueprint, render_template, request, make_response
 
@@ -124,42 +125,88 @@ def home():
 
         #5 - Stemming
         doc5 = []
-        for word in doc4.split():
+        for idx, word in enumerate(doc4.split()):
+            doc5Part = {}
+            doc5Part['data'] = ''
+            doc5Part['steps'] = []
+
             wordOriginal = word
             #5.1 - Hapus partikel
+            wordBefore = word
             word = checkParticle1(word)
             data = checkDict(word)
+            doc5Step = {}
+            doc5Step['wordBefore'] = wordBefore
+            doc5Step['word'] = word
+            doc5Step['isFound'] = False
+            doc5Part['steps'].append(doc5Step)
             if data:
-                doc5.append(data)
+                doc5Part['steps'][len(doc5Part['steps']) - 1]['isFound'] = True
+                doc5Part['data'] = data
+                doc5.append(doc5Part)
                 continue
 
             #5.2 - Hapus akhiran kepemilikan
+            wordBefore = word
             word = checkParticle2(word)
             data = checkDict(word)
+            doc5Step = {}
+            doc5Step['wordBefore'] = wordBefore
+            doc5Step['word'] = word
+            doc5Step['isFound'] = False
+            doc5Part['steps'].append(doc5Step)
             if data:
-                doc5.append(data)
+                doc5Part['steps'][len(doc5Part['steps']) - 1]['isFound'] = True
+                doc5Part['data'] = data
+                doc5.append(doc5Part)
                 continue
 
             #5.3 - Hapus awalan ke-1
+            wordBefore = word
             word = checkParticle3(word)
             data = checkDict(word)
+            doc5Step = {}
+            doc5Step['wordBefore'] = wordBefore
+            doc5Step['word'] = word
+            doc5Step['isFound'] = False
+            doc5Part['steps'].append(doc5Step)
             if data:
-                doc5.append(data)
+                doc5Part['steps'][len(doc5Part['steps']) - 1]['isFound'] = True
+                doc5Part['data'] = data
+                doc5.append(doc5Part)
                 continue
 
             #5.4 - Hapus awalan ke-2
+            wordBefore = word
             word = checkParticle4(word)
             data = checkDict(word)
+            doc5Step = {}
+            doc5Step['wordBefore'] = wordBefore
+            doc5Step['word'] = word
+            doc5Step['isFound'] = False
+            doc5Part['steps'].append(doc5Step)
             if data:
-                doc5.append(data)
+                doc5Part['steps'][len(doc5Part['steps']) - 1]['isFound'] = True
+                doc5Part['data'] = data
+                doc5.append(doc5Part)
                 continue
 
             #5.5 - Hapus akhiran
+            wordBefore = word
             word = checkParticle5(word, wordOriginal)
             data = checkDict(word)
+            doc5Step = {}
+            doc5Step['wordBefore'] = wordBefore
+            doc5Step['word'] = word
+            doc5Step['isFound'] = False
+            doc5Part['steps'].append(doc5Step)
             if data:
-                doc5.append(data)
+                doc5Part['steps'][len(doc5Part['steps']) - 1]['isFound'] = True
+                doc5Part['data'] = data
+                doc5.append(doc5Part)
                 continue
 
+            doc5.append(doc5Part)
 
-        return render_template("home.html", doc=doc, doc1=doc1, doc2=doc2, doc3=doc3, doc4=doc4, doc5=doc5)
+
+        return render_template("home.html", doc=doc, doc1=doc1, doc2=doc2, doc3=doc3, doc4=doc4, doc5=doc5, doc5Part=json.dumps(doc5Part))

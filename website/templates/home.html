@@ -22,6 +22,7 @@
         <h1>#4 - Filtering</h1>
         <p>{{doc4}}</p>
         <h1>#5 - Stemming</h1>
+        {% if doc5 %}
         <table>
             <tr>
                 <th>Kata Dasar</th>
@@ -34,6 +35,30 @@
                 </tr>
             {% endfor %}
         </table>
+        {% endif %}
+
+        {% if doc5 %}
+        <table>
+            <tr>
+                <th>Kata Awal</th>
+                <th>Kata Dasar</th>
+                <th>Tipe</th>
+                <th>Langkah</th>
+            </tr>
+            {% for d in doc5 %}
+                <tr>
+                    <td>{{d['steps'][0]['wordBefore']}}</td>
+                    <td>{{d['data'][1] or '-'}}</td>
+                    <td>{{d['data'][2] or '-'}}</td>
+                    <td>
+                        {% for s in d['steps'] %}
+                            <p>{{s['wordBefore']}} -> {{s['word']}} -> {{s['isFound']}}</p>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
     </div>
 </main>
 {% endblock %}
